@@ -1,0 +1,17 @@
+
+
+# intellij idea
+*.log
+*.iml
+*.ipr
+*.iws
+.idea/*
+!.idea/codeStyles/
+lib/
+out/
+
+secrets/
+
+#general
+*.class
+*.png
