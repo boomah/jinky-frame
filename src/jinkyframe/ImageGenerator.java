@@ -1,19 +1,17 @@
 package jinkyframe;
 
-import com.google.zxing.WriterException;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.Instant;
+import java.util.List;
 import java.util.*;
 
 import static jinkyframe.Colours.*;
 import static jinkyframe.ImageUtils.*;
-import static jinkyframe.ImageUtils.createImage;
-import static jinkyframe.ImageUtils.updateImage;
 
 public final class ImageGenerator {
     public static boolean DEBUG = false;
@@ -24,10 +22,13 @@ public final class ImageGenerator {
     public static void main(String[] args) throws Exception {
         var info = loadInfo();
         var image = generateImage(info);
-        saveImage(Paths.get("jinky-frame.png"), image);
+        saveImage(Paths.get("jinky-frame-full.png"), image);
+        var processedImage = bytesToImage(imageTo3BitBytes(image));
+        saveImage(Paths.get("jinky-frame.png"), processedImage);
         DEBUG = true;
         var debugImage = generateImage(info);
         saveImage(Paths.get("debug-jinky-frame.png"), debugImage);
+        System.out.println("Generated at " + Instant.now());
     }
 
     public static Info loadInfo() throws IOException {
@@ -50,7 +51,7 @@ public final class ImageGenerator {
     private static BufferedImage generateImage(Info info) throws Exception {
         var image = createImage(600, 448, Color.WHITE);
 
-/*        updateImage(image, g -> {
+        /*updateImage(image, g -> {
             g.setColor(black);
             g.fillRect(0, 0, 75, 448);
             g.setColor(white);
@@ -83,17 +84,17 @@ public final class ImageGenerator {
                 -1, new boolean[]{false, false, true},             // white
                 -16711936, new boolean[]{false, true, false},      // green
                 -16776961, new boolean[]{false, true, true},       // blue
-                -65536, new boolean[]{true, false, false},        // red
-                -256, new boolean[]{true, false, true},          // yellow
-                -14336, new boolean[]{true, true, false},        // orange
-                -4805218, new boolean[]{true, true, true}       // taupe
+                -65536, new boolean[]{true, false, false},         // red
+                -256, new boolean[]{true, false, true},            // yellow
+                -14336, new boolean[]{true, true, false},          // orange
+                -4805218, new boolean[]{true, true, true}          // taupe
         );
         var bits = new BitSet(image.getWidth() * image.getHeight() * 3);
 
         var index = 0;
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
-                var pixelBits = colourMap.get(image.getRGB(x, y));
+                var pixelBits = colourMap.getOrDefault(image.getRGB(x, y), colourMap.get(-1));
                 for (boolean bit : pixelBits) {
                     if (bit) {
                         bits.set(index);
@@ -103,6 +104,30 @@ public final class ImageGenerator {
             }
         }
         return bits.toByteArray();
+    }
+
+    private static BufferedImage bytesToImage(byte[] bytes) {
+        var bits = BitSet.valueOf(bytes);
+        var colourMap = Map.of(
+                List.of(false, false, false), black,
+                List.of(false, false, true), white,
+                List.of(false, true, false), green,
+                List.of(false, true, true), blue,
+                List.of(true, false, false), red,
+                List.of(true, false, true), yellow,
+                List.of(true, true, false), orange,
+                List.of(true, true, true), taupe
+        );
+        return createImage(width, height, g -> {
+            var index = 0;
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    var key = List.of(bits.get(index++), bits.get(index++), bits.get(index++));
+                    g.setColor(colourMap.get(key));
+                    g.drawRect(x, y, 1, 1);
+                }
+            }
+        });
     }
 
     private static void saveImage(Path path, BufferedImage image) throws IOException {

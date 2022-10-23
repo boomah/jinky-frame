@@ -1,0 +1,47 @@
+package jinkyframe;
+
+import java.awt.*;
+import java.awt.image.IndexColorModel;
+import java.util.Map;
+
+import static jinkyframe.Colours.black;
+import static jinkyframe.Colours.red;
+
+public final class ColourModels {
+    private ColourModels() {
+        // static methods
+    }
+
+    public static final IndexColorModel fullColourModel = createFullColourModel();
+
+    public static final IndexColorModel blackColourModel = createSingleColourModel(black);
+    public static final IndexColorModel redColourModel = createSingleColourModel(red);
+
+    private static final Map<Color, IndexColorModel> colourMaps = Map.of(
+            black, blackColourModel,
+            red, redColourModel
+    );
+
+    private static IndexColorModel createSingleColourModel(Color colour) {
+        byte max = (byte) 255;
+        byte[] r = new byte[]{(byte) colour.getRed(), max};
+        byte[] g = new byte[]{(byte) colour.getGreen(), max};
+        byte[] b = new byte[]{(byte) colour.getBlue(), max};
+        return new IndexColorModel(1, 2, r, g, b);
+    }
+
+    private static IndexColorModel createFullColourModel() {
+        byte max = (byte) 255;
+        return new IndexColorModel(
+                3,
+                8,
+                //          BLACK  WHITE GREEN  BLUE  RED  YELLOW     ORANGE     TAUPE
+                new byte[]{  0,     max,     0,    0, max,   max,         max, (byte) 182},
+                new byte[]{  0,     max,   max,    0,   0,   max,  (byte) 200, (byte) 173},
+                new byte[]{  0,     max,     0,  max,   0,     0,           0, (byte) 158});
+    }
+
+    public static IndexColorModel get(Color colour) {
+        return colourMaps.get(colour);
+    }
+}

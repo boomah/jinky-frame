@@ -6,7 +6,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
-import static jinkyframe.Colours.blue;
+import static jinkyframe.Colours.black;
 import static jinkyframe.ImageUtils.createImage;
 
 public final class QrCode {
@@ -22,7 +22,7 @@ public final class QrCode {
         var matrix = writer.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
 
         return createImage(width, height, g -> {
-            g.setColor(blue);
+            g.setColor(black);
             for (int x = 0; x < matrix.getWidth(); x++) {
                 for (int y = 0; y < matrix.getHeight(); y++) {
                     if (matrix.get(x, y)) {
