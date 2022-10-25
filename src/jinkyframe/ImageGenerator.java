@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.*;
-import java.time.Instant;
+import java.time.*;
 import java.util.List;
 import java.util.*;
 
@@ -34,13 +34,20 @@ public final class ImageGenerator {
     public static Info loadInfo() throws IOException {
         var props = new Properties();
         props.load(new FileInputStream("secrets/jinky.properties"));
+
+        Instant now = Instant.now();
+        var zoneId = ZoneId.of(props.getProperty("zoneId"));
+        var zonedDateTime = ZonedDateTime.ofInstant(now, zoneId);
+        var localDate = zonedDateTime.toLocalDate();
+        var dateInfo = new Info.DateInfo(localDate);
+
         var wifiInfo = new Info.WifiInfo(
                 props.getProperty("guestNetworkName"),
                 props.getProperty("guestNetworkEncryption"),
                 props.getProperty("guestNetworkPassword"),
                 props.getProperty("guestNetworkSpeed")
         );
-        return new Info(wifiInfo);
+        return new Info(dateInfo, wifiInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {
@@ -70,10 +77,11 @@ public final class ImageGenerator {
             g.fillRect(525, 0, 75, 448);
         });*/
 
+        var datePanel = DatePanel.generate(info, new Margins(5));
         var wifiPanel = WifiPanel.generate(info, new Margins(5));
 
-
         return updateImage(image, g -> {
+            g.drawImage(datePanel, 0, 0, null);
             g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
         });
     }

@@ -3,7 +3,6 @@ package jinkyframe;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
 
@@ -122,8 +121,8 @@ public final class ImageUtils {
         }
     }
 
-    public static Font font(String name, float size) throws IOException, FontFormatException {
-        return Font.createFont(Font.TRUETYPE_FONT, fontResource(name)).deriveFont(size);
+    public static Font font(String name, float size) {
+        return Utils.unsafe(() -> Font.createFont(Font.TRUETYPE_FONT, fontResource(name)).deriveFont(size));
     }
 
     public static InputStream resource(String name) {

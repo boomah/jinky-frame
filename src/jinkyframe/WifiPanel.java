@@ -12,9 +12,10 @@ public final class WifiPanel {
         // static methods
     }
 
+    private static final Font lineFont = font("line_pixel-7.ttf", 14.0f);
+
     public static BufferedImage generate(Info info, Margins margins) throws Exception {
         var wifiInfo = info.wifiInfo();
-        Font lineFont = font("line_pixel-7.ttf", 14.0f);
 
         var wifi = drawString("WIFI", lineFont, black);
         var wifiSpeed = drawString(wifiInfo.speed(), lineFont, black);

@@ -1,6 +1,13 @@
 package jinkyframe;
 
-public record Info(WifiInfo wifiInfo) {
+import java.time.LocalDate;
+
+public record Info(DateInfo dateInfo, WifiInfo wifiInfo) {
+
+    record DateInfo(LocalDate date) {
+
+    }
+
     record WifiInfo(String networkName, String encryption, String password, String speed) {
 
     }

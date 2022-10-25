@@ -8,12 +8,11 @@ import java.time.Instant;
 
 public final class Server {
     public static void main(String[] args) throws IOException {
-        var info = ImageGenerator.loadInfo();
         var server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/jinky", exchange -> {
             try {
                 System.out.println(Instant.now() + ": generate image");
-                var bytes = generateImageBytes(info);
+                var bytes = generateImageBytes(ImageGenerator.loadInfo());
                 System.out.println(Instant.now() + ": image generated, " + bytes.length + " bytes");
                 exchange.sendResponseHeaders(200, bytes.length);
                 var body = exchange.getResponseBody();
