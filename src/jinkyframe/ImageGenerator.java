@@ -12,6 +12,7 @@ import java.util.*;
 
 import static jinkyframe.Colours.*;
 import static jinkyframe.ImageUtils.*;
+import static jinkyframe.Info.*;
 
 public final class ImageGenerator {
     public static boolean DEBUG = false;
@@ -20,7 +21,7 @@ public final class ImageGenerator {
     private static final int height = 448;
 
     public static void main(String[] args) throws Exception {
-        var info = loadInfo();
+        var info = generateInfo();
         var image = generateImage(info);
         saveImage(Paths.get("jinky-frame-full.png"), image);
         var processedImage = bytesToImage(imageTo3BitBytes(image));
@@ -31,7 +32,7 @@ public final class ImageGenerator {
         System.out.println("Generated at " + Instant.now());
     }
 
-    public static Info loadInfo() throws IOException {
+    public static Info generateInfo() throws IOException {
         var props = new Properties();
         props.load(new FileInputStream("secrets/jinky.properties"));
 
@@ -39,15 +40,30 @@ public final class ImageGenerator {
         var zoneId = ZoneId.of(props.getProperty("zoneId"));
         var zonedDateTime = ZonedDateTime.ofInstant(now, zoneId);
         var localDate = zonedDateTime.toLocalDate();
-        var dateInfo = new Info.DateInfo(localDate);
+        var dateInfo = new DateInfo(localDate);
+        var localDateTime = zonedDateTime.toLocalDateTime();
 
-        var wifiInfo = new Info.WifiInfo(
+        var wifiInfo = new WifiInfo(
                 props.getProperty("guestNetworkName"),
                 props.getProperty("guestNetworkEncryption"),
                 props.getProperty("guestNetworkPassword"),
                 props.getProperty("guestNetworkSpeed")
         );
-        return new Info(dateInfo, wifiInfo);
+
+        var lat = props.getProperty("lat");
+        var lon = props.getProperty("lon");
+        var location = props.getProperty("location") + String.format(" (%s / %s)", lat, lon);
+
+        var systemInfo = new SystemInfo(
+                localDateTime.plusHours(1),
+                localDateTime,
+                location,
+                zoneId,
+                "Unknown",
+                "All systems are go!"
+        );
+
+        return new Info(dateInfo, wifiInfo, systemInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {
@@ -77,12 +93,15 @@ public final class ImageGenerator {
             g.fillRect(525, 0, 75, 448);
         });*/
 
-        var datePanel = DatePanel.generate(info, new Margins(5));
-        var wifiPanel = WifiPanel.generate(info, new Margins(5));
+        var margins = new Margins(5);
+        var datePanel = DatePanel.generate(info, margins);
+        var wifiPanel = WifiPanel.generate(info, margins);
+        var systemPanel = SystemPanel.generate(info, margins);
 
         return updateImage(image, g -> {
             g.drawImage(datePanel, 0, 0, null);
             g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
+            g.drawImage(systemPanel, width - wifiPanel.getWidth() - systemPanel.getWidth(), height - systemPanel.getHeight(), null);
         });
     }
 

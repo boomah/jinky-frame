@@ -29,17 +29,17 @@ public final class DatePanel {
         int width = 350;
         int height = 125;
 
-        int monthDayX = dayNumber.getWidth() + ((width - dayNumber.getWidth() - monthDay.getWidth()) / 2);
+        int monthDayX = dayNumber.getWidth() + ((width - dayNumber.getWidth() - monthDay.getWidth()) / 2) + 2;
 
         return createImage(width, height, g -> {
             g.drawImage(dayNumber, margins.left(), margins.top(), null);
             g.drawImage(monthDay, monthDayX, margins.top(), null);
 
             g.setPaint(Textures.dotFill(black));
-            g.drawLine(0, height - 2, width - 2, height - 2);
-            g.drawLine(0, height - 1, width - 2, height - 1);
-            g.drawLine(width - 1, 0, width - 1, height - 2);
-            g.drawLine(width - 2, 0, width - 2, height - 2);
+            g.drawLine(margins.left(), height - 2, width - 2, height - 2);
+            g.drawLine(margins.left() - 1, height - 1, width - 2, height - 1);
+            g.drawLine(width - 1, margins.top() - 1, width - 1, height - 2);
+            g.drawLine(width - 2, margins.top(), width - 2, height - 2);
         });
     }
 

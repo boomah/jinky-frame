@@ -129,6 +129,10 @@ public final class ImageUtils {
         return ImageUtils.class.getClassLoader().getResourceAsStream(name);
     }
 
+    public static int diff(int a, int b) {
+        return Math.round((a - b) / 2.0f);
+    }
+
     public static InputStream fontResource(String name) {
         return resource("fonts/" + name);
     }

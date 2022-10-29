@@ -12,7 +12,7 @@ public final class Server {
         server.createContext("/jinky", exchange -> {
             try {
                 System.out.println(Instant.now() + ": generate image");
-                var bytes = generateImageBytes(ImageGenerator.loadInfo());
+                var bytes = generateImageBytes(ImageGenerator.generateInfo());
                 System.out.println(Instant.now() + ": image generated, " + bytes.length + " bytes");
                 exchange.sendResponseHeaders(200, bytes.length);
                 var body = exchange.getResponseBody();
