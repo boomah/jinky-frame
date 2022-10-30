@@ -71,7 +71,7 @@ public final class ImageUtils {
         var currentDebug = ImageGenerator.DEBUG;
         ImageGenerator.DEBUG = false;
 
-        var image = createImage(300, 150, ColourModels.get(colour), g -> {
+        var image = createImage(300, 300, ColourModels.get(colour), g -> {
             g.setColor(colour);
             g.setFont(font);
             g.drawString(string, 20, 130);

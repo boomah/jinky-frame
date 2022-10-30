@@ -1,5 +1,7 @@
 package jinkyframe;
 
+import java.time.*;
+
 public final class Utils {
     private Utils() {
         // static methods
@@ -15,5 +17,9 @@ public final class Utils {
 
     public interface UnsafeSupplier<T> {
         T get() throws Exception;
+    }
+
+    public static LocalDate unixDtToLocalDate(long unixDt, ZoneId zoneId) {
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(unixDt * 1000), zoneId).toLocalDate();
     }
 }

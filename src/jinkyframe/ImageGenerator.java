@@ -32,7 +32,7 @@ public final class ImageGenerator {
         System.out.println("Generated at " + Instant.now());
     }
 
-    public static Info generateInfo() throws IOException {
+    public static Info generateInfo() throws IOException, InterruptedException {
         var props = new Properties();
         props.load(new FileInputStream("secrets/jinky.properties"));
 
@@ -42,6 +42,14 @@ public final class ImageGenerator {
         var localDate = zonedDateTime.toLocalDate();
         var dateInfo = new DateInfo(localDate);
         var localDateTime = zonedDateTime.toLocalDateTime();
+        var lat = props.getProperty("lat");
+        var lon = props.getProperty("lon");
+        var location = props.getProperty("location") + String.format(" (%s / %s)", lat, lon);
+        var weatherApiKey = props.getProperty("weatherApiKey");
+
+        var forecast = WeatherReader.readWeather(lat, lon, weatherApiKey);
+
+        var weatherInfo = new WeatherInfo(forecast);
 
         var wifiInfo = new WifiInfo(
                 props.getProperty("guestNetworkName"),
@@ -49,10 +57,6 @@ public final class ImageGenerator {
                 props.getProperty("guestNetworkPassword"),
                 props.getProperty("guestNetworkSpeed")
         );
-
-        var lat = props.getProperty("lat");
-        var lon = props.getProperty("lon");
-        var location = props.getProperty("location") + String.format(" (%s / %s)", lat, lon);
 
         var systemInfo = new SystemInfo(
                 localDateTime.plusHours(1),
@@ -63,7 +67,7 @@ public final class ImageGenerator {
                 "All systems are go!"
         );
 
-        return new Info(dateInfo, wifiInfo, systemInfo);
+        return new Info(dateInfo, weatherInfo, wifiInfo, systemInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {
@@ -95,11 +99,13 @@ public final class ImageGenerator {
 
         var margins = new Margins(5);
         var datePanel = DatePanel.generate(info, margins);
+        var weatherSummaryPanel = WeatherSummeryPanel.generate(info, margins);
         var wifiPanel = WifiPanel.generate(info, margins);
         var systemPanel = SystemPanel.generate(info, margins);
 
         return updateImage(image, g -> {
             g.drawImage(datePanel, 0, 0, null);
+            g.drawImage(weatherSummaryPanel, datePanel.getWidth(), 0, null);
             g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
             g.drawImage(systemPanel, width - wifiPanel.getWidth() - systemPanel.getWidth(), height - systemPanel.getHeight(), null);
         });
