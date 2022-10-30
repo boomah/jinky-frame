@@ -87,31 +87,34 @@ public record WeatherForecast(
     public record FeelsLike(double day, double night, double eve, double more) {
     }
 
-    public static final Map<String, String> ICON_MAP = Map.ofEntries(
+    public static final Map<String, IconDetails> ICON_MAP = Map.ofEntries(
             // day
-            entry("01d", "\uF00D"), // clear sky                
-            entry("02d", "\uF002"), // few clouds               
-            entry("03d", "\uF041"), // scattered clouds         
-            entry("04d", "\uF013"), // broken / overcast clouds 
-            entry("09d", "\uF009"), // drizzle / shower         
-            entry("10d", "\uF019"), // rain                     
-            entry("11d", "\uF01E"), // thunderstorm             
-            entry("13d", "\uF076"), // snow                     
-            entry("50d", "\uF014"), // mist                     
+            entry("01d", new IconDetails("\uF00D", 181.0f)), // clear sky                
+            entry("02d", new IconDetails("\uF002", 143.0f)), // few clouds               
+            entry("03d", new IconDetails("\uF041", 185.0f)), // scattered clouds         
+            entry("04d", new IconDetails("\uF013", 173.0f)), // broken / overcast clouds 
+            entry("09d", new IconDetails("\uF009", 143.0f)), // drizzle / shower         
+            entry("10d", new IconDetails("\uF019", 185.0f)), // rain                     
+            entry("11d", new IconDetails("\uF01E", 185.0f)), // thunderstorm             
+            entry("13d", new IconDetails("\uF076", 255.0f)), // snow                     
+            entry("50d", new IconDetails("\uF014", 155.0f)), // mist                     
 
             // night
-            entry("01n", "\uF02E"), // clear sky                
-            entry("02n", "\uF086"), // few clouds               
-            entry("03n", "\uF041"), // scattered clouds         
-            entry("04n", "\uF013"), // broken / overcast clouds 
-            entry("09n", "\uF029"), // drizzle / shower         
-            entry("10n", "\uF019"), // rain                     
-            entry("11n", "\uF01E"), // thunderstorm             
-            entry("13n", "\uF076"), // snow                     
-            entry("50n", "\uF014")  // mist                     
+            entry("01n", new IconDetails("\uF02E", 271.0f)), // clear sky                
+            entry("02n", new IconDetails("\uF086", 177.0f)), // few clouds               
+            entry("03n", new IconDetails("\uF041", 185.0f)), // scattered clouds         
+            entry("04n", new IconDetails("\uF013", 173.0f)), // broken / overcast clouds 
+            entry("09n", new IconDetails("\uF029", 175.0f)), // drizzle / shower         
+            entry("10n", new IconDetails("\uF019", 185.0f)), // rain                     
+            entry("11n", new IconDetails("\uF01E", 185.0f)), // thunderstorm             
+            entry("13n", new IconDetails("\uF076", 255.0f)), // snow                     
+            entry("50n", new IconDetails("\uF014", 155.0f))  // mist                     
     );
     
-    private static Map.Entry<String, String> entry(String key, String value) {
+    private static Map.Entry<String, IconDetails> entry(String key, IconDetails value) {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
+
+    public record IconDetails(String text, float size) {
+    }    
 }

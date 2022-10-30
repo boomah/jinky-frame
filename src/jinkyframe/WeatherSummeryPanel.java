@@ -12,7 +12,7 @@ public final class WeatherSummeryPanel {
         // static methods
     }
 
-    private static final Font iconFont = font("weathericons-regular-webfont.ttf", 100.0f);
+    private static final Font iconFont = font("weathericons-regular-webfont.ttf", 20.0f);
 
     public static BufferedImage generate(Info info, Margins margins) {
         int width = 250;
@@ -29,19 +29,28 @@ public final class WeatherSummeryPanel {
                     .orElseThrow();
 
             var weather = dayWeather.weather().get(0);
-            var iconText = ICON_MAP.get(weather.icon());
-//            var iconText = ICON_MAP.get("01d");
-//            var iconText = ICON_MAP.get("09d");
+            var iconDetails = ICON_MAP.get(weather.icon());
+//            var iconDetails = ICON_MAP.get("01d");
+//            var iconDetails = ICON_MAP.get("09d");
 
-            var icon = drawString(iconText, iconFont, black);
+            var icon = drawString(iconDetails.text(), iconFont.deriveFont(iconDetails.size()), black);
+
+            /*if (ImageGenerator.DEBUG) {
+
+                ICON_MAP.values().stream().sorted(Comparator.comparing(WeatherForecast.IconDetails::text)).forEach(details -> {
+                    var iconX = drawString(details.text(), iconFont, black);
+                    System.out.println(details.text() + " : " + iconX.getWidth() + ", " + iconX.getHeight());
+                });
+            }*/
 
             return createImage(width, height, g -> {
-                g.drawImage(icon, margins.left(), margins.top(), null);
+                g.drawImage(icon, diff(width, icon.getWidth()), margins.top(), null);
             });
         } catch (Exception e) {
+            e.printStackTrace();
             return createImage(width, height, g -> {
                 g.setColor(black);
-                g.drawString(e.getMessage(), margins.left(), margins.top());
+                g.drawString(e.getMessage(), margins.left(), 50);
             });
         }
     }

@@ -4,8 +4,7 @@ import java.awt.*;
 import java.awt.image.IndexColorModel;
 import java.util.Map;
 
-import static jinkyframe.Colours.black;
-import static jinkyframe.Colours.red;
+import static jinkyframe.Colours.*;
 
 public final class ColourModels {
     private ColourModels() {
@@ -17,6 +16,8 @@ public final class ColourModels {
     public static final IndexColorModel blackColourModel = createSingleColourModel(black);
     public static final IndexColorModel redColourModel = createSingleColourModel(red);
 
+    public static final IndexColorModel blackYellowColourModel = createTwoColourModel(black, yellow);
+
     private static final Map<Color, IndexColorModel> colourMaps = Map.of(
             black, blackColourModel,
             red, redColourModel
@@ -27,6 +28,13 @@ public final class ColourModels {
         byte[] r = new byte[]{(byte) colour.getRed(), max};
         byte[] g = new byte[]{(byte) colour.getGreen(), max};
         byte[] b = new byte[]{(byte) colour.getBlue(), max};
+        return new IndexColorModel(1, 2, r, g, b);
+    }
+
+    private static IndexColorModel createTwoColourModel(Color colour1, Color colour2) {
+        byte[] r = new byte[]{(byte) colour1.getRed(), (byte) colour2.getRed()};
+        byte[] g = new byte[]{(byte) colour1.getGreen(), (byte) colour2.getGreen()};
+        byte[] b = new byte[]{(byte) colour1.getBlue(), (byte) colour2.getBlue()};
         return new IndexColorModel(1, 2, r, g, b);
     }
 

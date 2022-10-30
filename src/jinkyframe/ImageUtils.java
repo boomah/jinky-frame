@@ -71,10 +71,10 @@ public final class ImageUtils {
         var currentDebug = ImageGenerator.DEBUG;
         ImageGenerator.DEBUG = false;
 
-        var image = createImage(300, 300, ColourModels.get(colour), g -> {
+        var image = createImage(400, 400, ColourModels.get(colour), g -> {
             g.setColor(colour);
             g.setFont(font);
-            g.drawString(string, 20, 130);
+            g.drawString(string, 50, 250);
         });
 
         var croppedImage = cropImage(image);
