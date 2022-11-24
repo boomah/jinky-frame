@@ -104,7 +104,7 @@ public record WeatherForecast(
             entry("02n", new IconDetails("\uF086", 177.0f)), // few clouds               
             entry("03n", new IconDetails("\uF041", 185.0f)), // scattered clouds         
             entry("04n", new IconDetails("\uF013", 173.0f)), // broken / overcast clouds 
-            entry("09n", new IconDetails("\uF029", 175.0f)), // drizzle / shower         
+            entry("09n", new IconDetails("\uF029", 176.0f)), // drizzle / shower         
             entry("10n", new IconDetails("\uF019", 185.0f)), // rain                     
             entry("11n", new IconDetails("\uF01E", 185.0f)), // thunderstorm             
             entry("13n", new IconDetails("\uF076", 255.0f)), // snow                     
