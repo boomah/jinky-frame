@@ -20,6 +20,6 @@ public final class Utils {
     }
 
     public static LocalDate unixDtToLocalDate(long unixDt, ZoneId zoneId) {
-        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(unixDt * 1000), zoneId).toLocalDate();
+        return ZonedDateTime.ofInstant(Instant.ofEpochSecond(unixDt), zoneId).toLocalDate();
     }
 }
