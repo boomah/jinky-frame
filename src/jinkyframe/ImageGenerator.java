@@ -48,8 +48,11 @@ public final class ImageGenerator {
         var weatherApiKey = props.getProperty("weatherApiKey");
 
         var forecast = WeatherReader.readWeather(lat, lon, weatherApiKey);
-
         var weatherInfo = new WeatherInfo(forecast);
+
+        var stationId = props.getProperty("tideStationId");
+        var tides = TideReader.readTide(stationId);
+        var tideInfo = new TideInfo(tides);
 
         var wifiInfo = new WifiInfo(
                 props.getProperty("guestNetworkName"),
@@ -67,7 +70,7 @@ public final class ImageGenerator {
                 "All systems are go!"
         );
 
-        return new Info(dateInfo, weatherInfo, wifiInfo, systemInfo);
+        return new Info(dateInfo, weatherInfo, tideInfo, wifiInfo, systemInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {

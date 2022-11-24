@@ -2,7 +2,8 @@ package jinkyframe;
 
 import java.time.*;
 
-public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, WifiInfo wifiInfo, SystemInfo systemInfo) {
+public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo, WifiInfo wifiInfo,
+                   SystemInfo systemInfo) {
 
     record DateInfo(LocalDate date) {
     }
@@ -15,5 +16,8 @@ public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, WifiInfo wifiInfo
     }
 
     record WeatherInfo(WeatherForecast forecast) {
+    }
+
+    record TideInfo(Tides tides) {
     }
 }
