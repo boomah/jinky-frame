@@ -25,11 +25,11 @@ public final class SystemPanel {
 
         var battery = string("Battery        : " + systemInfo.battery());
         var zoneId = systemInfo.zoneId();
-        var zoneIdText = zoneIdFormatter.format(zoneId.getRules().getOffset(systemInfo.previousUpdate()));
+        var zoneIdText = zoneIdFormatter.format(zoneId.getRules().getOffset(systemInfo.currentTime()));
         var timeZone = string("Time Zone    : " + format("%s (%s)", zoneId, zoneIdText));
         var location = string("Location      : " + systemInfo.location());
         var nextUpdate = dateTimeFormatter.format(systemInfo.nextUpdate());
-        var previousUpdate = dateTimeFormatter.format(systemInfo.previousUpdate());
+        var previousUpdate = dateTimeFormatter.format(systemInfo.currentTime());
         var update = string("Next/Prev : " + format("%s / %s", nextUpdate, previousUpdate));
 
         var h = update.getHeight();

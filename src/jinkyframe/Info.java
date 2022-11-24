@@ -10,7 +10,7 @@ public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, WifiInfo wifiInfo
     record WifiInfo(String networkName, String encryption, String password, String speed) {
     }
 
-    record SystemInfo(LocalDateTime nextUpdate, LocalDateTime previousUpdate, String location, ZoneId zoneId,
+    record SystemInfo(LocalDateTime nextUpdate, LocalDateTime currentTime, String location, ZoneId zoneId,
                       String battery, String status) {
     }
 
