@@ -105,7 +105,7 @@ public final class ImageUtils {
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 var rgb = image.getRGB(x, y);
-                if (rgb != -1) {
+                if ((rgb != -1) && (rgb != -131072)) {
                     minX = min(x, minX);
                     maxX = max(x, maxX);
                     minY = min(y, minY);
