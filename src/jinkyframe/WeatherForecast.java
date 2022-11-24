@@ -110,11 +110,11 @@ public record WeatherForecast(
             entry("13n", new IconDetails("\uF076", 255.0f)), // snow                     
             entry("50n", new IconDetails("\uF014", 155.0f))  // mist                     
     );
-    
+
     private static Map.Entry<String, IconDetails> entry(String key, IconDetails value) {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
 
     public record IconDetails(String text, float size) {
-    }    
+    }
 }

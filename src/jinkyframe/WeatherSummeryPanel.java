@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 
 import static jinkyframe.Colours.black;
 import static jinkyframe.ImageUtils.*;
@@ -71,17 +72,18 @@ public final class WeatherSummeryPanel {
 
             var weather = dayWeather.weather().get(0);
             var iconDetails = ICON_MAP.get(weather.icon());
-//            var iconDetails = ICON_MAP.get("01d");
+//            var iconDetails = ICON_MAP.get("01n");
+//            var iconDetails = ICON_MAP.get("13n");
 //            var iconDetails = ICON_MAP.get("09n");
 
             var icon = drawString(iconDetails.text(), iconFont.deriveFont(iconDetails.size()), black);
 
-/*            if (ImageGenerator.DEBUG) {
+            if (ImageGenerator.DEBUG) {
                 ICON_MAP.values().stream().sorted(Comparator.comparing(WeatherForecast.IconDetails::text)).forEach(details -> {
-                    var iconX = drawString(details.text(), iconFont.deriveFont(details.size()), black);
+                    var iconX = drawString(details.text(), iconFont.deriveFont(details.size() / 4.0f), black);
                     System.out.println(details.text() + " : " + iconX.getWidth() + ", " + iconX.getHeight());
                 });
-            }*/
+            }
 
             var temperaturePanel = generateTemperaturePanel(dayWeather, margins);
 
