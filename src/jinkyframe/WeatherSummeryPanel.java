@@ -71,7 +71,8 @@ public final class WeatherSummeryPanel {
             var sunEventY = maxIconHeight - Math.min(sunEventPanel1.getHeight(), sunEventPanel2.getHeight());
 
             var weather = dayWeather.weather().get(0);
-            var iconDetails = ICON_MAP.get(weather.icon());
+//            var iconDetails = ICON_MAP.get(weather.icon());
+            var iconDetails = ICON_MAP.get(currentWeather.icon());
 //            var iconDetails = ICON_MAP.get("01n");
 //            var iconDetails = ICON_MAP.get("13n");
 //            var iconDetails = ICON_MAP.get("09n");
