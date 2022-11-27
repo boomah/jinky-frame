@@ -104,6 +104,7 @@ public final class ImageGenerator {
         var datePanel = DatePanel.generate(info, margins);
         var weatherSummaryPanel = WeatherSummeryPanel.generate(info, margins);
         var weatherHourlyPanel = WeatherHourlyPanel.generate(info, margins);
+        var tidePanel = TidePanel.generate(info, margins);
         var wifiPanel = WifiPanel.generate(info, margins);
         var systemPanel = SystemPanel.generate(info, margins);
 
@@ -111,6 +112,7 @@ public final class ImageGenerator {
             g.drawImage(datePanel, 0, 0, null);
             g.drawImage(weatherSummaryPanel, datePanel.getWidth(), 0, null);
             g.drawImage(weatherHourlyPanel, 0, datePanel.getHeight(), null);
+            g.drawImage(tidePanel, datePanel.getWidth(), weatherSummaryPanel.getHeight(), null);
             g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
             g.drawImage(systemPanel, width - wifiPanel.getWidth() - systemPanel.getWidth(), height - systemPanel.getHeight(), null);
         });
