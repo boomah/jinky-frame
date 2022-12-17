@@ -112,7 +112,7 @@ public final class WeatherHourlyPanel {
                 g.drawImage(iconImage, x, iconY, null);
 
                 g.setFont(temperatureFont);
-                var feelsLikeForWidth = Long.toString(Math.abs(Math.round(hourWeather.feelsLike())));
+                var feelsLikeForWidth = Long.toString(Math.round(hourWeather.feelsLike()));
                 var feelsLikeWidth = g.getFontMetrics().stringWidth(feelsLikeForWidth);
                 var feelsLikeDiff = diff(iconWidth, feelsLikeWidth);
                 var feelsLike = Math.round(hourWeather.feelsLike()) + "\u00B0";
