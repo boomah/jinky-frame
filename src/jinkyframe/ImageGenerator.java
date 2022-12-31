@@ -112,7 +112,7 @@ public final class ImageGenerator {
             g.drawImage(datePanel, 0, 0, null);
             g.drawImage(weatherSummaryPanel, datePanel.getWidth(), 0, null);
             g.drawImage(weatherHourlyPanel, 0, datePanel.getHeight(), null);
-            g.drawImage(tidePanel, datePanel.getWidth(), weatherSummaryPanel.getHeight(), null);
+            g.drawImage(tidePanel, 0, weatherSummaryPanel.getHeight(), null);
             g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
             g.drawImage(systemPanel, width - wifiPanel.getWidth() - systemPanel.getWidth(), height - systemPanel.getHeight(), null);
         });

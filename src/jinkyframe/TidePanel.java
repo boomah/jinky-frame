@@ -10,13 +10,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static jinkyframe.Colours.*;
-import static jinkyframe.ImageUtils.Margins;
-import static jinkyframe.ImageUtils.createImage;
+import static jinkyframe.ImageUtils.*;
 
 public final class TidePanel {
     private TidePanel() {
         // static methods
     }
+
+    private static final Font font = font("Minecraftia-Regular.ttf", 8.0f);
 
     public static BufferedImage generate(Info info, Margins margins) {
 
@@ -35,18 +36,39 @@ public final class TidePanel {
 
         var graph = generateGraph(todaysTides, currentTime.toLocalTime(), zoneId);
 
-        return createImage(250, 112, g -> {
-            g.drawImage(graph, 5, 10, null);
+        int width = 264;
+
+        return createImage(width, 112, g -> {
+            int graphX = width - graph.getWidth() - margins.right() * 2 - 1;
+            int graphY = 18;
+            g.drawImage(graph, graphX, graphY, null);
+            g.setColor(black);
+            g.setFont(font);
+            int x = graphX - 5;
+            for (int hour = 0; hour <= 24; hour += 2) {
+                var hourString = String.format("%02d", hour % 24);
+                g.drawString(hourString, x, graph.getHeight() + graphY + 14);
+                x += 20;
+            }
+            int y = graph.getHeight() + graphY - 1;
+            for (int m = 1; m <= 7; m += 2) {
+                g.drawString(String.valueOf(m), graphX - 7, y);
+                y -= 20;
+            }
+
+            var title = "Thames Tide";
+            int titleWidth = g.getFontMetrics().stringWidth(title);
+            g.drawString(title, graphX + diff(graph.getWidth(), titleWidth), graphY);
         });
     }
 
     private static BufferedImage generateGraph(List<TidalHeightOccurrence> tides, LocalTime currentTime,
                                                ZoneId zoneId) {
         int w = 240;
-        int h = 75;
+        int h = 80;
         return createImage(w, h, g -> {
             g.setPaint(Textures.dotFill(black));
-            for (int y = 5; y < h; y += 10) {
+            for (int y = 10; y < h; y += 10) {
                 g.drawLine(1, y, w, y);
             }
             for (int x = 10; x < w; x += 10) {
