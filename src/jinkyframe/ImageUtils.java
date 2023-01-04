@@ -141,6 +141,14 @@ public final class ImageUtils {
         Margins(int margin) {
             this(margin, margin, margin, margin);
         }
+
+        public int width() {
+            return left + right;
+        }
+
+        public int height() {
+            return top + bottom;
+        }
     }
 
     record Bounds(int x, int y, int w, int h) {

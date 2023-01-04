@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 
 import static jinkyframe.Colours.*;
@@ -34,12 +35,23 @@ public final class TidePanel {
                 })
                 .toList();
 
+        var todaysHigh = todaysTides.stream()
+                .max(Comparator.comparingDouble(TidalHeightOccurrence::height))
+                .map(TidalHeightOccurrence::height)
+                .orElse(0.0);
+        var todaysLow = todaysTides.stream()
+                .min(Comparator.comparingDouble(TidalHeightOccurrence::height))
+                .map(TidalHeightOccurrence::height)
+                .orElse(0.0);
+
         var graph = generateGraph(todaysTides, currentTime.toLocalTime(), zoneId);
 
-        int width = 264;
+        var moonPanel = MoonPanel.generate(info, new Margins(0));
+
+        int width = 264 + 50;
 
         return createImage(width, 112, g -> {
-            int graphX = width - graph.getWidth() - margins.right() * 2 - 1;
+            int graphX = 12;
             int graphY = 18;
             g.drawImage(graph, graphX, graphY, null);
             g.setColor(black);
@@ -59,6 +71,15 @@ public final class TidePanel {
             var title = "Thames Tide";
             int titleWidth = g.getFontMetrics().stringWidth(title);
             g.drawString(title, graphX + diff(graph.getWidth(), titleWidth), graphY);
+
+            x = graphX + graph.getWidth() + margins.left() - 1;
+            g.drawImage(moonPanel, x, 0, null);
+
+            y = moonPanel.getHeight() + 18;
+            x = x + 4;
+
+            g.drawString(String.format("Low:   %.1fm", todaysLow), x, y);
+            g.drawString(String.format("High:  %.1fm", todaysHigh), x, y + 12);
         });
     }
 

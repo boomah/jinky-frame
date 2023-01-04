@@ -13,6 +13,10 @@ public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo
 
     record SystemInfo(LocalDateTime nextUpdate, LocalDateTime currentTime, String location, ZoneId zoneId,
                       String battery, String status) {
+
+        public ZonedDateTime currentZonedDateTime() {
+            return currentTime.atZone(zoneId);
+        }
     }
 
     record WeatherInfo(WeatherForecast forecast) {
