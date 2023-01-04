@@ -89,7 +89,11 @@ public final class WeatherSummeryPanel {
             var temperaturePanel = generateTemperaturePanel(dayWeather, margins);
 
             return createImage(width, height, g -> {
-                g.drawImage(icon, diff(width, icon.getWidth()), margins.top(), null);
+                int iconHeight = icon.getHeight();
+                int potentialIconY = diff(height - temperaturePanel.getHeight() - sunEventPanel1.getHeight(), iconHeight);
+                int iconY = potentialIconY < margins.top() ? margins.top() : potentialIconY;
+
+                g.drawImage(icon, diff(width, icon.getWidth()), iconY, null);
                 g.drawImage(sunEventPanel1, margins.left(), sunEventY, null);
                 var time1X = margins.left() + sunEventPanel1.getWidth() + 5;
                 g.drawImage(sunEventTimePanel1, time1X, sunEventY + 6, null);
@@ -108,8 +112,8 @@ public final class WeatherSummeryPanel {
     }
 
     private static BufferedImage generateTemperaturePanel(DayWeather dayWeather, Margins margins) {
-        var maxTempText = "H:" + Math.round(dayWeather.temp().max()) + "\u00B0";
-        var minTempText = "L:" + Math.round(dayWeather.temp().min()) + "\u00B0";
+        var maxTempText = "H:" + Math.round(dayWeather.temp().max()) + "°";
+        var minTempText = "L:" + Math.round(dayWeather.temp().min()) + "°";
         var maxTemp = drawString(maxTempText, temperatureFont, black);
         var minTemp = drawString(minTempText, temperatureFont, black);
 
