@@ -74,11 +74,11 @@ public final class WeatherHourlyPanel {
         var colour = black;
         return createImage(width, height, ColourModels.get(colour), g -> {
             var x = 15;
-            var previousHour = -1;
+            var counter = 0;
 
             for (HourWeather hourWeather : hourWeatherList) {
                 var hour = hour(hourWeather, zoneId);
-                if ((previousHour != -1) && (hour != (previousHour + 1))) {
+                if (counter == 4) {
                     g.setPaint(Textures.dotFill(black));
                     int y1 = 30;
                     int y2 = 96;
@@ -88,8 +88,6 @@ public final class WeatherHourlyPanel {
                     x += 1;
                     g.drawLine(x, y1, x, y2);
                     x += 13;
-                } else {
-                    previousHour = hour;
                 }
                 g.setColor(colour);
 
@@ -115,11 +113,12 @@ public final class WeatherHourlyPanel {
                 var feelsLikeForWidth = Long.toString(Math.round(hourWeather.feelsLike()));
                 var feelsLikeWidth = g.getFontMetrics().stringWidth(feelsLikeForWidth);
                 var feelsLikeDiff = diff(iconWidth, feelsLikeWidth);
-                var feelsLike = Math.round(hourWeather.feelsLike()) + "\u00B0";
+                var feelsLike = Math.round(hourWeather.feelsLike()) + "°";
 
                 g.drawString(feelsLike, x + feelsLikeDiff, height - margins.bottom());
 
                 x += 65;
+                counter++;
             }
         });
     }
