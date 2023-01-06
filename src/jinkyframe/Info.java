@@ -1,9 +1,10 @@
 package jinkyframe;
 
 import java.time.*;
+import java.util.List;
 
-public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo, WifiInfo wifiInfo,
-                   SystemInfo systemInfo) {
+public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo, BirthdayInfo birthdayInfo,
+                   WifiInfo wifiInfo, SystemInfo systemInfo) {
 
     record DateInfo(LocalDate date) {
     }
@@ -23,5 +24,8 @@ public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo
     }
 
     record TideInfo(Tides tides) {
+    }
+
+    record BirthdayInfo(List<Birthday> birthdays) {
     }
 }

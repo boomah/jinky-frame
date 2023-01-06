@@ -54,6 +54,9 @@ public final class ImageGenerator {
         var tides = TideReader.readTide(stationId);
         var tideInfo = new TideInfo(tides);
 
+        var birthdays = BirthdayReader.readBirthdays();
+        var birthdayInfo = new BirthdayInfo(birthdays);
+
         var wifiInfo = new WifiInfo(
                 props.getProperty("guestNetworkName"),
                 props.getProperty("guestNetworkEncryption"),
@@ -70,7 +73,7 @@ public final class ImageGenerator {
                 "All systems are go!"
         );
 
-        return new Info(dateInfo, weatherInfo, tideInfo, wifiInfo, systemInfo);
+        return new Info(dateInfo, weatherInfo, tideInfo, birthdayInfo, wifiInfo, systemInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {
@@ -105,16 +108,22 @@ public final class ImageGenerator {
         var weatherSummaryPanel = WeatherSummeryPanel.generate(info, margins);
         var weatherHourlyPanel = WeatherHourlyPanel.generate(info, margins);
         var tidePanel = TidePanel.generate(info, margins);
+        var birthdayPanel = BirthdayPanel.generate(info, margins);
         var wifiPanel = WifiPanel.generate(info, margins);
         var systemPanel = SystemPanel.generate(info, margins);
+
+        int wifiX = width - wifiPanel.getWidth();
+        int systemX = wifiX - systemPanel.getWidth();
+        int bottomY = height - systemPanel.getHeight();
 
         return updateImage(image, g -> {
             g.drawImage(datePanel, 0, 0, null);
             g.drawImage(weatherSummaryPanel, datePanel.getWidth(), 0, null);
             g.drawImage(weatherHourlyPanel, 0, datePanel.getHeight(), null);
             g.drawImage(tidePanel, 0, weatherSummaryPanel.getHeight(), null);
-            g.drawImage(wifiPanel, width - wifiPanel.getWidth(), height - wifiPanel.getHeight(), null);
-            g.drawImage(systemPanel, width - wifiPanel.getWidth() - systemPanel.getWidth(), height - systemPanel.getHeight(), null);
+            g.drawImage(birthdayPanel, systemX - birthdayPanel.getWidth(), bottomY, null);
+            g.drawImage(wifiPanel, wifiX, bottomY, null);
+            g.drawImage(systemPanel, systemX, bottomY, null);
         });
     }
 
