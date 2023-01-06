@@ -12,7 +12,7 @@ public final class MoonPanel {
         // static methods
     }
 
-    private static final Font iconFont = font("weathericons-regular-webfont.ttf", 64.0f);
+    private static final Font iconFont = font("weathericons-regular-webfont.ttf", 65.0f);
     private static final Font font = font("Minecraftia-Regular.ttf", 8.0f);
 
     public static BufferedImage generate(Info info, Margins margins) {
