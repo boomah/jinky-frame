@@ -70,6 +70,11 @@ public final class WeatherHourlyPanel {
         return Instant.ofEpochSecond(hourWeather.dt()).atZone(zoneId).getHour();
     }
 
+    private static boolean checkHourSkip(HourWeather firstHour, ZoneId zoneId) {
+        var hour = hour(firstHour, zoneId);
+        return (hour != 4) && (hour != 14);
+    }
+
     private static BufferedImage generateHourlyIcons(List<HourWeather> hourWeatherList, ZoneId zoneId, Margins margins) {
         var colour = black;
         return createImage(width, height, ColourModels.get(colour), g -> {
@@ -78,7 +83,7 @@ public final class WeatherHourlyPanel {
 
             for (HourWeather hourWeather : hourWeatherList) {
                 var hour = hour(hourWeather, zoneId);
-                if (counter == 4) {
+                if (counter == 4 && checkHourSkip(hourWeatherList.get(0), zoneId)) {
                     g.setPaint(Textures.dotFill(black));
                     int y1 = 30;
                     int y2 = 96;
