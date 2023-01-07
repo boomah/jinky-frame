@@ -109,20 +109,24 @@ public final class ImageGenerator {
         var weatherHourlyPanel = WeatherHourlyPanel.generate(info, margins);
         var tidePanel = TidePanel.generate(info, margins);
         var windPanel = WindPanel.generate(info, margins);
+        var humidityPanel = HumidityPanel.generate(info, margins);
         var birthdayPanel = BirthdayPanel.generate(info, margins);
         var wifiPanel = WifiPanel.generate(info, margins);
         var systemPanel = SystemPanel.generate(info, margins);
 
+        var windX = tidePanel.getWidth();
         int wifiX = width - wifiPanel.getWidth();
         int systemX = wifiX - systemPanel.getWidth();
         int bottomY = height - systemPanel.getHeight();
+        var row3Y = weatherSummaryPanel.getHeight();
 
         return updateImage(image, g -> {
             g.drawImage(datePanel, 0, 0, null);
             g.drawImage(weatherSummaryPanel, datePanel.getWidth(), 0, null);
             g.drawImage(weatherHourlyPanel, 0, datePanel.getHeight(), null);
-            g.drawImage(tidePanel, 0, weatherSummaryPanel.getHeight(), null);
-            g.drawImage(windPanel, tidePanel.getWidth(), weatherSummaryPanel.getHeight(), null);
+            g.drawImage(tidePanel, 0, row3Y, null);
+            g.drawImage(windPanel, windX, row3Y, null);
+            g.drawImage(humidityPanel, windX, row3Y + windPanel.getHeight(), null);
             g.drawImage(birthdayPanel, systemX - birthdayPanel.getWidth(), bottomY, null);
             g.drawImage(wifiPanel, wifiX, bottomY, null);
             g.drawImage(systemPanel, systemX, bottomY, null);
