@@ -28,9 +28,10 @@ public final class WindPanel {
         return createImage(width, height, g -> {
             int windY = 33;
 
-            var iconImage = drawString(windIcons.get(windIndex), iconFont, black);
+            var windIcon = windIcons.get(windIndex);
+            var iconImage = drawString(windIcon.code, iconFont, black);
             int iconX = diff(width, iconImage.getWidth());
-            int iconY = (height - windY) - 2;
+            int iconY = (height - windY) - windIcon.heightOffset;
             g.drawImage(iconImage, iconX, iconY, null);
 
             g.setColor(black);
@@ -46,14 +47,17 @@ public final class WindPanel {
         });
     }
 
-    private static final List<String> windIcons = Arrays.asList(
-            "\uF058",
-            "\uF057",
-            "\uF04D",
-            "\uF088",
-            "\uF044",
-            "\uF043",
-            "\uF048",
-            "\uF087"
+    private static final List<WindIcon> windIcons = Arrays.asList(
+            new WindIcon("\uF058", 2),
+            new WindIcon("\uF057", -2),
+            new WindIcon("\uF04D", -2),
+            new WindIcon("\uF088", -2),
+            new WindIcon("\uF044", 2),
+            new WindIcon("\uF043", -2),
+            new WindIcon("\uF048", -2),
+            new WindIcon("\uF087", -2)
     );
+
+    private record WindIcon(String code, int heightOffset) {
+    }
 }
