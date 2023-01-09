@@ -40,7 +40,6 @@ public final class ImageGenerator {
         var zoneId = ZoneId.of(props.getProperty("zoneId"));
         var zonedDateTime = ZonedDateTime.ofInstant(now, zoneId);
         var localDate = zonedDateTime.toLocalDate();
-        var dateInfo = new DateInfo(localDate);
         var localDateTime = zonedDateTime.toLocalDateTime();
         var lat = props.getProperty("lat");
         var lon = props.getProperty("lon");
@@ -73,7 +72,7 @@ public final class ImageGenerator {
                 "All systems are go!"
         );
 
-        return new Info(dateInfo, weatherInfo, tideInfo, birthdayInfo, wifiInfo, systemInfo);
+        return new Info(weatherInfo, tideInfo, birthdayInfo, wifiInfo, systemInfo);
     }
 
     public static byte[] generateImageBytes(Info info) throws Exception {

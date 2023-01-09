@@ -22,7 +22,7 @@ public final class DatePanel {
     private static final Font monthDayFont = font("Lato-Bold.ttf", 60.0f);
 
     public static BufferedImage generate(Info info, Margins margins) {
-        var date = info.dateInfo().date();
+        var date = info.systemInfo().currentTime().toLocalDate();
         var dayNumber = generateDayNumber(date);
         var monthDay = generateMonthDay(date, dayNumber.getHeight(), margins);
 

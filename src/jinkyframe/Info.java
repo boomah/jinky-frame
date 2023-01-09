@@ -3,11 +3,8 @@ package jinkyframe;
 import java.time.*;
 import java.util.List;
 
-public record Info(DateInfo dateInfo, WeatherInfo weatherInfo, TideInfo tideInfo, BirthdayInfo birthdayInfo,
-                   WifiInfo wifiInfo, SystemInfo systemInfo) {
-
-    record DateInfo(LocalDate date) {
-    }
+public record Info(WeatherInfo weatherInfo, TideInfo tideInfo, BirthdayInfo birthdayInfo, WifiInfo wifiInfo,
+                   SystemInfo systemInfo) {
 
     record WifiInfo(String networkName, String encryption, String password, String speed) {
     }

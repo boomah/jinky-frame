@@ -4,7 +4,7 @@ import jinkyframe.WeatherForecast.DayWeather;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 
@@ -34,10 +34,10 @@ public final class WeatherSummeryPanel {
 
     public static BufferedImage generate(Info info, Margins margins) {
         try {
-            var today = info.dateInfo().date();
+            var now = info.systemInfo().currentTime();
+            var today = now.toLocalDate();
             var zoneId = info.systemInfo().zoneId();
             var forecast = info.weatherInfo().forecast();
-            var currentWeather = forecast.current().weather().get(0);
             var dayWeather = forecast.daily().stream()
                     .filter(weather -> today.equals(unixDtToLocalDate(weather.dt(), zoneId)))
                     .findFirst()
@@ -47,16 +47,15 @@ public final class WeatherSummeryPanel {
                     .findFirst()
                     .orElseThrow();
 
-            var updateTime = info.systemInfo().currentTime();
             var sunriseToday = unixDtToLocalDateTime(dayWeather.sunrise(), zoneId);
             var sunsetToday = unixDtToLocalDateTime(dayWeather.sunset(), zoneId);
             var sunriseTomorrow = unixDtToLocalDateTime(tomorrowDayWeather.sunrise(), zoneId);
             var sunsetTomorrow = unixDtToLocalDateTime(tomorrowDayWeather.sunset(), zoneId);
             SunEvent sunEvent1, sunEvent2;
-            if (updateTime.isAfter(sunriseToday) && updateTime.isAfter(sunsetToday)) {
+            if (now.isAfter(sunriseToday) && now.isAfter(sunsetToday)) {
                 sunEvent1 = new SunEvent(sunriseIcon, sunriseTomorrow);
                 sunEvent2 = new SunEvent(sunsetIcon, sunsetTomorrow);
-            } else if (updateTime.isAfter(sunriseToday)) {
+            } else if (now.isAfter(sunriseToday)) {
                 sunEvent1 = new SunEvent(sunsetIcon, sunsetToday);
                 sunEvent2 = new SunEvent(sunriseIcon, sunriseTomorrow);
             } else {
@@ -70,10 +69,7 @@ public final class WeatherSummeryPanel {
             var sunEventTimePanel2 = drawString(sunEvent2.timeString(), timeFont, black);
             var sunEventY = maxIconHeight - Math.min(sunEventPanel1.getHeight(), sunEventPanel2.getHeight());
 
-            var weather = dayWeather.weather().get(0);
-//            var iconDetails = ICON_MAP.get(weather.icon());
-//            var iconDetails = ICON_MAP.get(currentWeather.icon());
-            var iconDetails = ICON_MAP.get(weather.icon());
+            var iconDetails = ICON_MAP.get(forecastFromHours(today, forecast, zoneId));
 //            var iconDetails = ICON_MAP.get("01n");
 //            var iconDetails = ICON_MAP.get("13n");
 //            var iconDetails = ICON_MAP.get("09n");
@@ -133,7 +129,24 @@ public final class WeatherSummeryPanel {
         });
     }
 
-    record SunEvent(String icon, LocalDateTime time) {
+    private static String forecastFromHours(LocalDate today, WeatherForecast forecast, ZoneId zoneId) {
+        return forecast.hourly().stream()
+                .takeWhile(hourWeather -> today.isEqual(unixDtToLocalDate(hourWeather.dt(), zoneId)))
+                .map(hourWeather -> hourWeather.weather().get(0).icon())
+                .map(iconCode -> {
+                    int iconInt = Integer.parseInt(iconCode.replace("d", "").replace("n", ""));
+                    int order = iconInt == 50 ? 8 : iconInt;
+                    return new HourForecastIcon(iconCode, order);
+                })
+                .max(Comparator.comparingInt(value -> value.order))
+                .orElseThrow()
+                .icon;
+    }
+
+    private record HourForecastIcon(String icon, int order) {
+    }
+
+    private record SunEvent(String icon, LocalDateTime time) {
         String timeString() {
             return time.toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString();
         }
