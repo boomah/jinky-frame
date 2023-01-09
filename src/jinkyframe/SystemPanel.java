@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 import static java.lang.String.*;
 import static jinkyframe.Colours.black;
+import static jinkyframe.Colours.green;
 import static jinkyframe.ImageUtils.*;
 
 public final class SystemPanel {
@@ -34,7 +35,7 @@ public final class SystemPanel {
 
         var h = update.getHeight();
 
-        var status = string(systemInfo.status());
+        var status = border(string(systemInfo.status()), 2);
 
         var topY = height - margins.bottom() - h * 4 - 12;
         var statusBoxWidth = width - margins.left() - margins.right();
@@ -48,8 +49,9 @@ public final class SystemPanel {
         var x = margins.left();
 
         return createImage(width, height, g -> {
+            g.setColor(green);
+            g.fillRect(margins.left(), margins.top(), statusBoxWidth, statusBoxHeight);
             g.setColor(black);
-
             g.drawRect(margins.left(), margins.top(), statusBoxWidth, statusBoxHeight);
             g.drawImage(status, statusX, statusY, null);
 
@@ -62,5 +64,11 @@ public final class SystemPanel {
 
     private static BufferedImage string(String string) {
         return drawString(string, font, black);
+    }
+
+    private static BufferedImage border(BufferedImage image, int size) {
+        return createImage(image.getWidth() + size * 2, image.getHeight() + size * 2, g -> {
+            g.drawImage(image, size, size, null);
+        });
     }
 }
