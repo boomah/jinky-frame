@@ -51,12 +51,12 @@ public final class BirthdayPanel {
         var nextBirthday = birthdays.get(startIndex);
         long daysUntilNext = daysUntilNext(currentDate, nextBirthday.day().withYear(currentDate.getYear()));
         boolean soon = daysUntilNext < 5;
-        var nextBirthdayImage = border(lines.remove(0), 4, soon);
+        var nextBirthdayImage = border(lines.remove(0), soon);
 
         return createImage(width, 86, g -> {
             g.drawImage(title, margins.left(), margins.top(), null);
 
-            g.drawImage(nextBirthdayImage, margins.left(), title.getHeight() + 10, null);
+            g.drawImage(nextBirthdayImage, margins.left(), title.getHeight() + 8, null);
 
             int y = title.getHeight() + 30;
             for (BufferedImage line : lines) {
@@ -70,18 +70,20 @@ public final class BirthdayPanel {
         return drawString(string, font, black);
     }
 
-    private static BufferedImage border(BufferedImage image, int size, boolean soon) {
-        int width = image.getWidth() + size * 2;
-        int height = image.getHeight() + size * 2;
+    private static BufferedImage border(BufferedImage image, boolean soon) {
+        int width = image.getWidth() + 8;
+        int height = image.getHeight() + 12;
         return createImage(width, height, g -> {
             if (soon) {
                 g.setColor(orange);
                 g.drawRect(1, 1, width - 3, height - 3);
                 g.drawRect(2, 2, width - 5, height - 5);
+                g.drawLine(3, 3, width - 4, 3);
+                g.drawLine(3, height - 4, width - 4, height - 4);
                 g.setColor(black);
                 g.drawRect(0, 0, width - 1, height - 1);
             }
-            g.drawImage(image, size, size, null);
+            g.drawImage(image, 4, 6, null);
         });
     }
 
