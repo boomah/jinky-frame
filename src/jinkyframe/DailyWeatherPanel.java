@@ -59,7 +59,7 @@ public final class DailyWeatherPanel {
 
         var iconDetails = ICON_MAP.get(weather.icon());
         var font = iconFont.deriveFont(iconDetails.size() / 4.0f);
-        var iconImage = drawString(iconDetails.text(), font, black);
+        var iconImage = drawIcon(iconDetails.text(), font);
         int iconX = diff(width, iconImage.getWidth()) - 1;
         int iconY = diff(height, iconImage.getHeight());
 

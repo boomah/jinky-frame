@@ -71,10 +71,11 @@ public final class WeatherSummeryPanel {
 
             var iconDetails = ICON_MAP.get(forecastFromHours(today, forecast, zoneId));
 //            var iconDetails = ICON_MAP.get("01n");
+//            var iconDetails = ICON_MAP.get("01d");
 //            var iconDetails = ICON_MAP.get("13n");
 //            var iconDetails = ICON_MAP.get("09n");
 
-            var icon = drawString(iconDetails.text(), iconFont.deriveFont(iconDetails.size()), black);
+            var icon = drawIcon(iconDetails.text(), iconFont.deriveFont(iconDetails.size()));
 
             var temperaturePanel = generateTemperaturePanel(dayWeather, margins);
 

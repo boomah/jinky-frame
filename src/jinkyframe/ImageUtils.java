@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 import static java.awt.image.BufferedImage.TYPE_BYTE_INDEXED;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static jinkyframe.Colours.debugColour;
-import static jinkyframe.Colours.white;
+import static jinkyframe.Colours.*;
+import static jinkyframe.WeatherForecast.ICON_MAP;
 
 public final class ImageUtils {
     private ImageUtils() {
@@ -80,6 +80,42 @@ public final class ImageUtils {
         var croppedImage = cropImage(image);
         ImageGenerator.DEBUG = currentDebug;
         return croppedImage;
+    }
+
+    public static BufferedImage drawIcon(String icon, Font font) {
+        var colour = black;
+        var currentDebug = ImageGenerator.DEBUG;
+        ImageGenerator.DEBUG = false;
+
+        var image = createImage(400, 400, ColourModels.get(colour), g -> {
+            g.setColor(colour);
+            g.setFont(font);
+            g.drawString(icon, 50, 250);
+        });
+
+        var croppedImage = cropImage(image);
+        ImageGenerator.DEBUG = currentDebug;
+
+        var fullSun = ICON_MAP.get("01d").text().equals(icon);
+
+        if (fullSun) {
+            floodFill(croppedImage, -1, yellow, croppedImage.getWidth() / 2, croppedImage.getHeight() / 2);
+        }
+
+        return croppedImage;
+    }
+
+    private static void floodFill(BufferedImage image, int previousColour, Color newColour, int x, int y) {
+        var g = (Graphics2D) image.getGraphics();
+        g.setColor(newColour);
+        if ((x >= 0) && (x < image.getWidth()) && (y >= 0) && (y < image.getHeight()) &&
+                (image.getRGB(x, y) == previousColour)) {
+            g.fillRect(x, y, 1, 1);
+            floodFill(image, previousColour, newColour, x + 1, y);
+            floodFill(image, previousColour, newColour, x - 1, y);
+            floodFill(image, previousColour, newColour, x, y + 1);
+            floodFill(image, previousColour, newColour, x, y - 1);
+        }
     }
 
     public static BufferedImage cropImage(BufferedImage image) {

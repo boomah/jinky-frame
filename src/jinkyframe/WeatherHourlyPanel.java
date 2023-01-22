@@ -31,7 +31,7 @@ public final class WeatherHourlyPanel {
             var forecast = info.weatherInfo().forecast();
             var hourly = hourlyWeather(forecast, zoneId);
 
-            var iconPanel = generateHourlyIcons(hourly, zoneId,margins);
+            var iconPanel = generateHourlyIcons(hourly, zoneId, margins);
 
             return createImage(width, height, g -> g.drawImage(iconPanel, 0, 0, null));
         } catch (Exception e) {
@@ -76,8 +76,7 @@ public final class WeatherHourlyPanel {
     }
 
     private static BufferedImage generateHourlyIcons(List<HourWeather> hourWeatherList, ZoneId zoneId, Margins margins) {
-        var colour = black;
-        return createImage(width, height, ColourModels.get(colour), g -> {
+        return createImage(width, height, g -> {
             var x = 15;
             var counter = 0;
 
@@ -94,33 +93,36 @@ public final class WeatherHourlyPanel {
                     g.drawLine(x, y1, x, y2);
                     x += 13;
                 }
-                g.setColor(colour);
+                g.setColor(black);
 
                 var weather = hourWeather.weather().get(0);
                 var iconDetails = ICON_MAP.get(weather.icon());
+//                var iconDetails = ICON_MAP.get("01d");
 //                var iconDetails = ICON_MAP.get("09d");
 //                var iconDetails = ICON_MAP.get("11n");
 
                 var font = iconFont.deriveFont(iconDetails.size() / 4.0f);
-                var iconImage = drawString(iconDetails.text(), font, black);
+                var iconImage = drawIcon(iconDetails.text(), font);
                 var iconWidth = iconImage.getWidth();
 
                 g.setFont(hourFont);
                 var formattedHour = String.format("%01d", hour);
-                var hourTextWidth = g.getFontMetrics().stringWidth(formattedHour);
-                var hourDiff = diff(iconWidth, hourTextWidth);
-                g.drawString(formattedHour, x + hourDiff, 23);
+                var hourImage = drawString(formattedHour, hourFont, black);
+                var hourDiff = diff(iconWidth, hourImage.getWidth());
+                g.drawImage(hourImage, x + hourDiff, 10, null);
 
                 var iconY = diff(height, iconImage.getHeight());
                 g.drawImage(iconImage, x, iconY, null);
 
                 g.setFont(temperatureFont);
                 var feelsLikeForWidth = Long.toString(Math.round(hourWeather.feelsLike()));
-                var feelsLikeWidth = g.getFontMetrics().stringWidth(feelsLikeForWidth);
-                var feelsLikeDiff = diff(iconWidth, feelsLikeWidth);
+                var feelsLikeForWidthAbs = Long.toString(Math.abs(Math.round(hourWeather.feelsLike())));
+                var feelsLikeWidth = drawString(feelsLikeForWidth, temperatureFont, black).getWidth();
+                var feelsLikeWidthAbs = drawString(feelsLikeForWidthAbs, temperatureFont, black).getWidth();
+                var temperatureX = diff(iconWidth, feelsLikeWidth) - ((feelsLikeWidth - feelsLikeWidthAbs) / 2);
                 var feelsLike = Math.round(hourWeather.feelsLike()) + "°";
-
-                g.drawString(feelsLike, x + feelsLikeDiff, height - margins.bottom());
+                var temperatureImage = drawString(feelsLike, temperatureFont, black);
+                g.drawImage(temperatureImage, x + temperatureX, height - 26, null);
 
                 x += 65;
                 counter++;
