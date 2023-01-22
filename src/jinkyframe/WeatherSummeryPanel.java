@@ -76,13 +76,6 @@ public final class WeatherSummeryPanel {
 
             var icon = drawString(iconDetails.text(), iconFont.deriveFont(iconDetails.size()), black);
 
-            if (ImageGenerator.DEBUG) {
-                ICON_MAP.values().stream().sorted(Comparator.comparing(WeatherForecast.IconDetails::text)).forEach(details -> {
-                    var iconX = drawString(details.text(), iconFont.deriveFont(details.size() / 4.0f), black);
-                    System.out.println(details.text() + " : " + iconX.getWidth() + ", " + iconX.getHeight());
-                });
-            }
-
             var temperaturePanel = generateTemperaturePanel(dayWeather, margins);
 
             return createImage(width, height, g -> {

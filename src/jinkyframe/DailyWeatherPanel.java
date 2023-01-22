@@ -40,11 +40,13 @@ public final class DailyWeatherPanel {
             }
 
             g.setPaint(Textures.dotFill(black));
-            g.drawLine(2, 11, 2, 101);
-            g.drawLine(3, 11, 3, 101);
+            g.drawLine(0, 3, 0, height - 3);
 
-            g.drawLine(11, 2, 169, 2);
-            g.drawLine(11, 3, 169, 3);
+            g.drawLine(0, 2, 174, 2);
+            g.drawLine(0, 3, 174, 3);
+
+            g.drawLine(0, height - 3, 174, height - 3);
+            g.drawLine(0, height - 2, 174, height - 2);
         });
     }
 

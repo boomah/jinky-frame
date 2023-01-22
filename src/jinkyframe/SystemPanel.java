@@ -44,8 +44,6 @@ public final class SystemPanel {
         var statusX = margins.left() + diff(statusBoxWidth, status.getWidth());
         var statusY = margins.top() + diff(statusBoxHeight, status.getHeight());
 
-        System.out.println("! " + statusBoxHeight + " " + status.getHeight() + " " + statusY);
-
         var x = margins.left();
 
         return createImage(width, height, g -> {
