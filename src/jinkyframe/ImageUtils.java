@@ -96,10 +96,10 @@ public final class ImageUtils {
         var croppedImage = cropImage(image);
         ImageGenerator.DEBUG = currentDebug;
 
-        var fullSun = ICON_MAP.get("01d").text().equals(icon);
-
-        if (fullSun) {
+        if (ICON_MAP.get("01d").text().equals(icon)) {
             floodFill(croppedImage, -1, yellow, croppedImage.getWidth() / 2, croppedImage.getHeight() / 2);
+        } else if (ICON_MAP.get("02d").text().equals(icon)) {
+            floodFill(croppedImage, -1, yellow, (croppedImage.getWidth() / 3) * 2, croppedImage.getHeight() / 2);
         }
 
         return croppedImage;
