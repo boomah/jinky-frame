@@ -17,6 +17,7 @@ public final class ColourModels {
     public static final IndexColorModel redColourModel = createSingleColourModel(red);
 
     public static final IndexColorModel blackYellowColourModel = createTwoColourModel(black, yellow);
+    public static final IndexColorModel whiteGreenColourModel = createTwoColourModel(white, green);
 
     private static final Map<Color, IndexColorModel> colourMaps = Map.of(
             black, blackColourModel,
@@ -44,9 +45,9 @@ public final class ColourModels {
                 3,
                 8,
                 //          BLACK  WHITE GREEN  BLUE  RED  YELLOW     ORANGE     TAUPE
-                new byte[]{  0,     max,     0,    0, max,   max,         max, (byte) 182},
-                new byte[]{  0,     max,   max,    0,   0,   max,  (byte) 200, (byte) 173},
-                new byte[]{  0,     max,     0,  max,   0,     0,           0, (byte) 158});
+                new byte[]{0, max, 0, 0, max, max, max, (byte) 182},
+                new byte[]{0, max, max, 0, 0, max, (byte) 200, (byte) 173},
+                new byte[]{0, max, 0, max, 0, 0, 0, (byte) 158});
     }
 
     public static IndexColorModel get(Color colour) {

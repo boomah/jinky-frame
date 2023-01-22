@@ -4,9 +4,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.time.format.DateTimeFormatter;
 
-import static java.lang.String.*;
-import static jinkyframe.Colours.black;
-import static jinkyframe.Colours.green;
+import static java.lang.String.format;
+import static jinkyframe.ColourModels.whiteGreenColourModel;
+import static jinkyframe.Colours.*;
 import static jinkyframe.ImageUtils.*;
 
 public final class SystemPanel {
@@ -35,23 +35,18 @@ public final class SystemPanel {
 
         var h = update.getHeight();
 
-        var status = border(string(systemInfo.status()), 2);
-
         var topY = height - margins.bottom() - h * 4 - 12;
         var statusBoxWidth = width - margins.left() - margins.right();
         var statusBoxHeight = topY - margins.top() - margins.bottom();
 
-        var statusX = margins.left() + diff(statusBoxWidth, status.getWidth());
-        var statusY = margins.top() + diff(statusBoxHeight, status.getHeight());
+        var status = drawStatus(systemInfo.status(), statusBoxWidth, statusBoxHeight);
 
         var x = margins.left();
 
         return createImage(width, height, g -> {
-            g.setColor(green);
-            g.fillRect(margins.left(), margins.top(), statusBoxWidth, statusBoxHeight);
+            g.drawImage(status, margins.left(), margins.top(), null);
             g.setColor(black);
             g.drawRect(margins.left(), margins.top(), statusBoxWidth, statusBoxHeight);
-            g.drawImage(status, statusX, statusY, null);
 
             g.drawImage(battery, x, topY, null);
             g.drawImage(timeZone, x, height - margins.bottom() - h * 3 - 8, null);
@@ -60,13 +55,18 @@ public final class SystemPanel {
         });
     }
 
-    private static BufferedImage string(String string) {
-        return drawString(string, font, black);
+    private static BufferedImage drawStatus(String status, int width, int height) {
+        return createImage(width, height, whiteGreenColourModel, g -> {
+            g.setColor(green);
+            g.fillRect(0, 0, width, height);
+            g.setColor(white);
+            int stringWidth = g.getFontMetrics().stringWidth(status);
+            var x = diff(width, stringWidth);
+            g.drawString(status, x, 20);
+        });
     }
 
-    private static BufferedImage border(BufferedImage image, int size) {
-        return createImage(image.getWidth() + size * 2, image.getHeight() + size * 2, g -> {
-            g.drawImage(image, size, size, null);
-        });
+    private static BufferedImage string(String string) {
+        return drawString(string, font, black);
     }
 }
